@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Search across .md files in same directory as script; harvest markdown "todo" (- [ ])
+# into todo/todo.txt as priority I (Inbox) and marks all todos as forwarded - [>] a la Bullet Journal
+# Requires gnu-sed via homebrew (brew install gnu-sed), or if linux, change all "gsed" commands to sed
+
+grep -h "\-\ \[\ \]" *.md > tasks.txt # -h flag removes filenames
+gsed -i 's/^ *//g' tasks.txt # removes blank space (works on tabs?) at beginning of line of tasks
+gsed -i 's/^...../(I)/' tasks.txt # replaces first five characters of line with "(I)"
+cat tasks.txt >> todo/todo.txt # append new I tasks to todo.txt
+rm tasks.txt
+gsed -i 's/-\s\[\s\]/- \[>]/g' *.md # change all open todo tokens to forwarded
